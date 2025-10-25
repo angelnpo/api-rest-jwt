@@ -1,0 +1,48 @@
+server:
+    port: 8080
+    servlet:
+        context-path: /apiRestJwt
+---
+logging:
+    level:
+        org:
+            springframework:
+                security: TRACE
+        root: INFO
+---
+spring:
+    datasource:
+        #type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: org.postgresql.Driver
+        url: jdbc:postgresql://angelnpo:5432/DBDEV
+        username: admin
+        password: sasa
+
+        hikari:
+            connection-timeout: 60000
+            idle-timeout: 600000
+            max-lifetime: 1800000
+            maximum-pool-size: 20
+            connection-test-query: SELECT 1
+
+    jpa:
+        properties:
+            hibernate:
+                default_schema: api_rest_demo
+                dialect: org.hibernate.dialect.PostgreSQLDialect
+        hibernate:
+            ddl-auto: update
+        show-sql: true
+
+    security:
+        jwt:
+            token-prefix: 'Bearer '
+            secret: 586B6F75282F2B422F4528482B4D6251655468576D5A7134743777217A254E2A
+            expiration: 1800000 # 30 minutes
+        rsa:
+            key-pair:
+                public-key: classpath:/certificates/public.pem
+                private-key: classpath:/certificates/private.pem
+        user: # an example match configuration properties
+            username: angel
+            age: 18
