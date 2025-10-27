@@ -1,4 +1,4 @@
-package ec.com.api.jwt.vo;
+package ec.com.api.jwt.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthRes {
+public class LoginDto {
 
-    private String token;
+    private String username;
+    private String password;
 }

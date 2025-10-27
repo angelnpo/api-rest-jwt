@@ -41,7 +41,7 @@ These additional references should also help you:
 Run with task gradle bootRun
 
 ```
-./gradlew -Pmode=commandLine -Pdebug=1 -Dorg.gradle.java.home=/opt/java/jdk-21.0.6
+./gradlew bootRun -Pmode=commandLine -Pdebug=1 -Dorg.gradle.java.home=/opt/java/jdk-21.0.6
 ```
 
 ## Generate keys

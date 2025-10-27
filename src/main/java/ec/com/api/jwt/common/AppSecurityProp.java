@@ -12,12 +12,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @Component
-@ConfigurationProperties(prefix = "spring.security")
+@ConfigurationProperties(prefix = "spring.api")
 public class AppSecurityProp {
 
     private Jwt jwt;
     private Rsa rsa;
-    private User user;
+    private Data data;
 
     @Getter
     @Setter
@@ -39,6 +39,6 @@ public class AppSecurityProp {
         RSAPrivateKey privateKey;
     }
 
-    public record User(String username, Integer age) {
+    public record Data(String name, Integer age) {
     }
 }

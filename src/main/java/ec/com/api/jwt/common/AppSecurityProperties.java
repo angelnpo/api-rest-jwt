@@ -5,8 +5,8 @@ import java.security.interfaces.RSAPublicKey;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(prefix = "spring.security")
-public record AppSecurityProperties(Jwt jwt, Rsa rsa, User user) {
+@ConfigurationProperties(prefix = "spring.api")
+public record AppSecurityProperties(Jwt jwt, Rsa rsa, Data data) {
 
     public record Jwt(String tokenPrefix, String secret, Long expiration) {
     }
@@ -17,6 +17,6 @@ public record AppSecurityProperties(Jwt jwt, Rsa rsa, User user) {
     public record KeyPair(RSAPublicKey publicKey, RSAPrivateKey privateKey) {
     }
 
-    public record User(String username, Integer age) {
+    public record Data(String name, Integer age) {
     }
 }

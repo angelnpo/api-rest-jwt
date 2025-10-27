@@ -8,12 +8,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import ec.com.api.jwt.dto.AuthDto;
+import ec.com.api.jwt.dto.LoginDto;
+import ec.com.api.jwt.dto.RegisterDto;
 import ec.com.api.jwt.entity.UserEntity;
 import ec.com.api.jwt.enums.Role;
 import ec.com.api.jwt.repository.UserRepository;
-import ec.com.api.jwt.vo.AuthRes;
-import ec.com.api.jwt.vo.LoginReq;
-import ec.com.api.jwt.vo.RegisterReq;
 
 @Service
 @RequiredArgsConstructor
@@ -30,15 +30,15 @@ public class AuthService {
      * @param registerReq
      * @return
      */
-    public AuthRes register(RegisterReq registerReq) {
+    public AuthDto register(RegisterDto registerReq) {
         UserEntity userEntity = UserEntity.builder().username(registerReq.getUsername())
                 .firstName(registerReq.getFirstName()).lastName(registerReq.getLastName())
                 .password(this.passwordEncoder.encode(registerReq.getPassword()))
-                .country(registerReq.getCountry()).role(Role.USER).build();
+                .country(registerReq.getCountry()).role(Role.ADMIN).build();
 
         this.userRepository.save(userEntity);
 
-        return AuthRes.builder().token(this.jwtService.getToken(userEntity)).build();
+        return AuthDto.builder().token(this.jwtService.getToken(userEntity)).build();
     }
 
     /**
@@ -47,13 +47,13 @@ public class AuthService {
      * @param loginReq
      * @return
      */
-    public AuthRes login(LoginReq loginReq) {
+    public AuthDto login(LoginDto loginReq) {
         this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 loginReq.getUsername(), loginReq.getPassword()));
 
         UserEntity userEntity = this.userRepository.findByUsername(loginReq.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        return AuthRes.builder().token(this.jwtService.getToken(userEntity)).build();
+        return AuthDto.builder().token(this.jwtService.getToken(userEntity)).build();
     }
 }

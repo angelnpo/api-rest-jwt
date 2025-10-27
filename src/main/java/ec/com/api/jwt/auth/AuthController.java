@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import ec.com.api.jwt.common.AppSecurityProp;
+import ec.com.api.jwt.dto.AuthDto;
+import ec.com.api.jwt.dto.LoginDto;
+import ec.com.api.jwt.dto.RegisterDto;
 import ec.com.api.jwt.service.AuthService;
-import ec.com.api.jwt.vo.AuthRes;
-import ec.com.api.jwt.vo.LoginReq;
-import ec.com.api.jwt.vo.RegisterReq;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -28,10 +28,10 @@ public class AuthController {
      * @return
      */
     @PostMapping("/login")
-    public ResponseEntity<AuthRes> login(@RequestBody LoginReq loginReq) {
+    public ResponseEntity<AuthDto> login(@RequestBody LoginDto loginReq) {
         // This is an example of how to use the properties
         this.appSecurityProp.getJwt().getSecret();
-        this.appSecurityProp.getUser().age();
+        this.appSecurityProp.getData().age();
 
         return ResponseEntity.ok(this.authService.login(loginReq));
     }
@@ -43,7 +43,7 @@ public class AuthController {
      * @return
      */
     @PostMapping("/register")
-    public ResponseEntity<AuthRes> register(@RequestBody RegisterReq registerReq) {
+    public ResponseEntity<AuthDto> register(@RequestBody RegisterDto registerReq) {
         return ResponseEntity.ok(this.authService.register(registerReq));
     }
 }

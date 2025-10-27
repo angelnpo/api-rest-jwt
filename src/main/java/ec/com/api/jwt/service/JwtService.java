@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JwtService {
 
-    @Value("${spring.security.jwt.secret}")
+    @Value("${spring.api.jwt.secret}")
     private String secretKey;
 
     private final AppSecurityProperties appSecurityProperties;
