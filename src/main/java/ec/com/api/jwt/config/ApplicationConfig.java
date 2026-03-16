@@ -1,5 +1,7 @@
 package ec.com.api.jwt.config;
 
+import ec.com.api.jwt.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,37 +13,40 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import ec.com.api.jwt.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-
+/**
+ * Application configuration.
+ *
+ * @author Angel Cuenca
+ */
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig {
 
-    private final UserRepository userRepository;
+	private final UserRepository userRepository;
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig)
-            throws Exception {
-        return authConfig.getAuthenticationManager();
-    }
+	@Bean
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+		return authConfig.getAuthenticationManager();
+	}
 
-    @Bean
-    public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider provider =
-                new DaoAuthenticationProvider(this.userDetailsService());
-        provider.setPasswordEncoder(this.passwordEncoder());
-        return provider;
-    }
+	@Bean
+	public AuthenticationProvider authenticationProvider() {
+		DaoAuthenticationProvider provider = new DaoAuthenticationProvider(this.userDetailsService());
+		provider.setPasswordEncoder(this.passwordEncoder());
+		return provider;
+	}
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+	@Bean
+	public UserDetailsService userDetailsService() {
+//		return username -> this.userRepository.findByUsername(username)
+//				.orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return username -> this.userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-    }
+		return email -> this.userRepository.findByEmail(email)
+				.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+	}
+
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 }

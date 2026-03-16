@@ -2,7 +2,7 @@
 
 The following was discovered as part of building this project:
 
--   The original package name 'ec.com.api.api-rest-jwt' is invalid and this project uses 'ec.com.api.api_rest_jwt' instead.
+-   The original package name 'ec.com.api.api-rest-jwt' is invalid and this project uses 'ec.com.api.jwt' instead.
 
 # Getting Started
 
@@ -43,35 +43,5 @@ Run with task gradle bootRun
 ```
 ./gradlew bootRun -Pmode=commandLine -Pdebug=1 -Dorg.gradle.java.home=/opt/java/jdk-21.0.6
 ```
-
-## Generate keys
-
-### OpenSSL
-
-Example of how to generate public and private RSA keys with OpenSSL. Not used in this project.
-
-```
-openssl genrsa -out src/main/resources/certificates/keypair.pem 2048
-```
-
-Extract public key of keypair.pem
-
-```
-openssl rsa -in src/main/resources/certificates/keypair.pem -pubout -out src/main/resources/certificates/public.pem
-```
-
-Extract the private key from keyPair
-
--   Where:
-
-    pkcs8 -topk8: convert it to PKCS8 format
-
-    -inform PEM -nocrypt: indicates that the private key should not be encrypted
-
-```
-openssl pkcs8 -topk8 -inform PEM -nocrypt -in src/main/resources/certificates/keypair.pem -out src/main/resources/certificates/private.pem
-```
-
-### Java
-
-To generate the keys from Java, run the GenerateKeyPair.java class.
+## Generate secret key
+To generate the keys from Java, run the HmacKeyGenerator.java

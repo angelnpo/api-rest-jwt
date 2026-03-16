@@ -1,48 +1,70 @@
+---
 server:
-    port: 8080
-    servlet:
-        context-path: /apiRestJwt
+  port: 9080
+  servlet:
+    context-path: /api-rest-jwt
+
 ---
 logging:
-    level:
-        org:
-            springframework:
-                security: TRACE
-        root: INFO
+  level:
+    root: INFO
+    org:
+      springframework:
+        security: INFO
+    org.springframework.jdbc.datasource.init: DEBUG
+    org.springframework.boot.autoconfigure.sql.init: DEBUG
+
 ---
 spring:
-    datasource:
-        #type: com.zaxxer.hikari.HikariDataSource
-        driver-class-name: org.postgresql.Driver
-        url: jdbc:postgresql://angelnpo:5432/DBDEV
-        username: admin
-        password: sasa
+  application:
+    name: spring-mvc-demo
+  datasource:
+    #type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://angelnpo:5432/DBDEV?currentSchema=api_rest_jwt
+    username: admin
+    password: sasa
+    hikari:
+      connection-test-query: SELECT 1
+      maximum-pool-size: 100
+      connection-timeout: 30000
+      max-lifetime: 300000 # 5 min
+      minimumIdle: 20 # mínimo de conexiones inactivas
+      idleTimeout: 300000 #Esto evita conexiones “zombi” y reduce validaciones fallidas.
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: api_rest_jwt
+        order_inserts: true
+        order_updates: true
+        generate_statistics: false
+        hbm2ddl:
+          create_namespaces: true
+        id:
+          batch_versioned_data: true
+#            new_generator_mappings: false # true for increment by 50 or (allocationSize property in mapping), false for increment one by one
+        jdbc:
+          batch_size: 50
+          batch_versioned_data: true
+    hibernate:
+      ddl-auto: update
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
+      schema-location: classpath:db/schema.sql
+      data-location: classpath:db/data.sql
+      platform: postgres
 
-        hikari:
-            connection-timeout: 60000
-            idle-timeout: 600000
-            max-lifetime: 1800000
-            maximum-pool-size: 20
-            connection-test-query: SELECT 1
-    jpa:
-        properties:
-            hibernate:
-                default_schema: api_rest_demo
-        hibernate:
-            ddl-auto: update
-        show-sql: true
-        open-in-view: false
-        database: postgresql
-
-    api: # spring recommends adding the keys to spring.mykeys
-        jwt:
-            token-prefix: 'Bearer '
-            secret: 586B6F75282F2B422F4528482B4D6251655468576D5A7134743777217A254E2A
-            expiration: 1800000 # 30 minutes
-        rsa:
-            key-pair:
-                public-key: classpath:/certificates/public.pem
-                private-key: classpath:/certificates/private.pem
-        data: # an example match configuration properties
-            name: Janny
-            age: 25
+--- # spring recommends adding the keys to custom properties
+app:
+    jwt:
+        token-prefix: 'Bearer '
+        secret: gaEbamFmubtBYCJhnfwQ_FrP1b2XCl2E6sPUvi68FeFIYa15_fB5l7LgaUszKnWtuUIBxHIcFtjtzc0Uq6l6Sg        
+        expiration: 1800000 # 30 minutes
+        refresh-expiration: 604800000  # 7 days refresh token
+    data: # an example match configuration properties
+        name: Janeth
+        age: 25
